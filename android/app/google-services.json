@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595022126070",
+    "project_id": "qlkhachhang-af079",
+    "storage_bucket": "qlkhachhang-af079.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595022126070:android:358ce41ae8073b0982c5d7",
+        "android_client_info": {
+          "package_name": "com.example.ql_khachhang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595022126070-194gq31u62m9r0rdpjgfceadd9357tll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoMGu0Ixn1mYqiVXP-Eqz-ib0NmTgSJjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595022126070-194gq31u62m9r0rdpjgfceadd9357tll.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
