@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ql_khachhang/khachHang.dart';
 import 'package:uuid/uuid.dart';
 
@@ -78,7 +79,7 @@ class _InfoPage extends State<InfoPage> with InputValidationMixin{
                 if (isPhoneValid(value!))
                   return null;
                 else
-                  return 'Số điện thoại không hợp lệ';
+                  return 'Số điện thoại không hợp lệ * ví dụ : 093241***';
               },
             ),
             Padding(padding: EdgeInsets.all(10)),
@@ -98,33 +99,56 @@ class _InfoPage extends State<InfoPage> with InputValidationMixin{
             ),
             Padding(padding: EdgeInsets.all(10)),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 if(_formKey.currentState!.validate())
                   {
                     if(khachHang.id=="")
                       {
                         var uuid = Uuid();
                         var id = uuid.v1();
-                        _databaseRef.child(id).set(<String, String>{'id': id,
+                        showAlertDialog(context);
+                        await _databaseRef.child(id).set(<String, String>{'id': id,
                           'hoTen': _hotencontroller.text ,
                           'diaChi': _diachicontroller.text,
                           'soDT':_sdtcontroller.text,
                         });
+                        khachHang.id = id;
+                        Navigator.pop(context);
+                        Fluttertoast.showToast(
+                            msg: "Đã thêm khách hàng thành công",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blueAccent,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
                       }
                     else{
-                      _databaseRef.child(khachHang.id).set(<String, String>{'id': khachHang.id,
+                        showAlertDialog(context);
+                        await _databaseRef.child(khachHang.id).set(<String, String>{'id': khachHang.id,
                         'hoTen': _hotencontroller.text ,
                         'diaChi': _diachicontroller.text,
                         'soDT':_sdtcontroller.text,
                       });
+                        Navigator.pop(context);
+                        Fluttertoast.showToast(
+                            msg: "Đã sửa thông tin khách hàng thành công",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blueAccent,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
                     }
 
                   }
               },
               color: Colors.blue,
               textColor: Colors.white,
-              child: Text("Lưu thông tin",style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold ),),
-              padding: EdgeInsets.fromLTRB(40,20,40,20),
+              child: Text("Lưu thông tin",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold ),),
+              padding: EdgeInsets.fromLTRB(60,20,60,20),
             )
           ],
         ),
@@ -133,14 +157,28 @@ class _InfoPage extends State<InfoPage> with InputValidationMixin{
     );
   }
 }
-
+showAlertDialog(BuildContext context){
+  AlertDialog alert=AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(margin: EdgeInsets.only(left: 5),child:Text("Loading...." )),
+      ],),
+  );
+  showDialog(barrierDismissible: false,
+    context:context,
+    builder:(BuildContext context){
+      return alert;
+    },
+  );
+}
 mixin InputValidationMixin {
   bool isEmty(String text) => !text.isEmpty;
   bool isPasswordValid(String password) => password.length > 6;
   bool isrePasswordValid(String password,String repassword) => password.length > 6 &&password==repassword;
   bool isPhoneValid(String phone) {
     RegExp regex = new RegExp(
-        r"^([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{3})");
+        r"^(09|01|07|03|05|02|06[2|6|8|9|7|3])+([0-9]{8})\b");
     return regex.hasMatch(phone);
   }
 }

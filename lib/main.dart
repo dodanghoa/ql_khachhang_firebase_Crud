@@ -12,7 +12,7 @@ Future<void> main() async {
 }
 
 TextStyle _titlestyle =
-    TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
+    TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 TextStyle _subtitlestyle = TextStyle(
   color: Colors.white,
   fontSize: 14,
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     subtitle: Text(
                       "Địa chỉ : " +
                           display[index].diaChi +
-                          "    Số điện thọai : " +
+                          "\nSố điện thọai : " +
                           display[index].soDT,
                       style: _subtitlestyle,
                     ),
@@ -153,11 +153,29 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       new RaisedButton(
                           color: Colors.red,
                           onPressed: () {
-                            _database
-                                .child("DSKhachHang")
-                                .child(data[index].id.toString())
-                                .remove();
-                            LoadData();
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Thông báo'),
+                                  content: const Text('Xác nhận xóa?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => {
+                                        _database
+                                            .child("DSKhachHang")
+                                            .child(data[index].id.toString())
+                                            .remove(),
+                                       Navigator.pop(context),
+                                          LoadData()
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),);
                           },
                           child: new Text(
                             "Xóa",
@@ -196,9 +214,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             ],
           )),
       ListTile(
-        leading: Icon(Icons.settings),
+        leading: Icon(Icons.info),
         title: const Text(
-          'Cài đặt',
+          'Thông tin chi tiết',
           style: TextStyle(fontSize: 16),
         ),
         onTap: () {
@@ -209,9 +227,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         },
       ),
       ListTile(
-        leading: Icon(Icons.info),
+        leading: Icon(Icons.settings),
         title: const Text(
-          'Thông tin chi tiết',
+          'Cài đặt',
           style: TextStyle(fontSize: 16),
         ),
         onTap: () {
